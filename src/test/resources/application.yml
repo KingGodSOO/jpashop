@@ -1,0 +1,20 @@
+# 테스트 시 읽히는 설정파일. 없으면 src/resources/application.yml을 읽는다.
+spring:
+# 별도의 설정이 없을 경우 스프링 부트에서 메모리모드로 돌려버린다.(driver-class도 현재 등록된 라이브러리를 보고 찾아준다.)
+#  datasource:
+#    url: jdbc:h2:mem:test
+#    username: sa
+#    password:
+#    driver-class-name: org.h2.Driver
+#
+#  jpa:
+#    hibernate:
+#      ddl-auto: create-drop  # 테스트 후 테이블을 모두 날린다. create라면 테스트 전에 테이블을 날린다. 그렇기에 반드시 조심해야 하는 옵션이다. 테스트 시 반드시 조심!!!
+#    properties:
+#      hibernate:
+    #         show_sql: true
+#        format_sql: true
+
+logging.level:
+  org.hibernate.SQL: debug
+  org.hibernate.type: trace
