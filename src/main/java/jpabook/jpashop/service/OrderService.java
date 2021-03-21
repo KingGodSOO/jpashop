@@ -1,9 +1,6 @@
 package jpabook.jpashop.service;
 
-import jpabook.jpashop.domain.Delivery;
-import jpabook.jpashop.domain.Member;
-import jpabook.jpashop.domain.Order;
-import jpabook.jpashop.domain.OrderItem;
+import jpabook.jpashop.domain.*;
 import jpabook.jpashop.domain.item.Item;
 import jpabook.jpashop.repository.ItemRepository;
 import jpabook.jpashop.repository.MemberRepository;
@@ -29,7 +26,7 @@ public class OrderService {
     @Transactional
     public Long order(Long memberId, Long itemId, int count) {
 
-        //엔티티 조회
+        //엔티티 조회 -> 트랜잭션 안에서 엔티티를 조회해야 영속 상태가 유지된다.
         Member member = memberRepository.findOne(memberId);
         Item item = itemRepository.findOne(itemId);
 
@@ -53,7 +50,7 @@ public class OrderService {
      * 주문 취소
      */
     @Transactional
-    public void cancleOrder(Long orderId) {
+    public void cancelOrder(Long orderId) {
         //주문 엔티티 조회
         Order order = orderRepository.findOne(orderId);
         //주문 취손
@@ -62,7 +59,7 @@ public class OrderService {
     }
 
     //검색
-//    public List<Order> findOrders(OrderSearch orderSearch){
-//        return orderRepository.findAll(orderSearch);
-//    }
+    public List<Order> findOrders(OrderSearch orderSearch){
+        return orderRepository.findAllByString(orderSearch);
+    }
 }
