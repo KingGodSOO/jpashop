@@ -61,4 +61,10 @@ public class MemberService {
     public Member findOne(Long memberId) {
         return memberRepository.findOne(memberId);
     }
+
+    @Transactional
+    public void update(Long id, String name) {  // entity를 반환하지 않는 이유가 있다. 이 때 사용된 엔티티는 업데이트를 위한 쿼리용 객체이기 때문에(?)
+        Member member = memberRepository.findOne(id);
+        member.setName(name); //변경감지
+    }
 }
