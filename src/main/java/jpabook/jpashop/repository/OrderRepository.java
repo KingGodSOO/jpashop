@@ -32,8 +32,7 @@ public class OrderRepository {
      * Querydsl이 가장 권장되는 방식이나 아직 다루지 않은 내용이다.
      */
     // JPQL로 처리
-    public List<Order> findAllByString(OrderSearch orderSearch) {
-        //language=JPAQL
+    public List<Order> findAllByString(OrderSearch orderSearch) { //language=JPQL
         String jpql = "select o From Order o join o.member m";
         boolean isFirstCondition = true;
         //주문 상태 검색
