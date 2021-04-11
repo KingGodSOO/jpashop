@@ -10,4 +10,11 @@ public class JpashopApplication {
 		SpringApplication.run(JpashopApplication.class, args);
 	}
 
+	// Order simple조회 v1용 라이브러리. 무시해도 됨.
+//	@Bean
+//	Hibernate5Module hibernate5Module() {
+//		Hibernate5Module hibernate5Module = new Hibernate5Module();
+//		hibernate5Module.configure(Hibernate5Module.Feature.FORCE_LAZY_LOADING, true);
+//		return hibernate5Module;
+//	}
 }
