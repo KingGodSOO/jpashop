@@ -4,6 +4,7 @@ import lombok.Getter;
 
 import javax.persistence.Embeddable;
 
+// VO 개념의 클래스
 @Embeddable
 @Getter
 public class Address {
