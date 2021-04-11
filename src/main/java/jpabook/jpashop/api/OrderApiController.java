@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
@@ -98,6 +99,35 @@ public class OrderApiController {
         for (Order order : orders) {
             System.out.println("order ref=" + order + " id=" + order.getId());
         }
+
+        List<OrderDto> result = orders.stream()
+                .map(OrderDto::new)
+                .collect(Collectors.toList());
+
+        return result;
+    }
+
+    /**
+     *
+     * V3.1 엔티티를 조회해서 DTO로 변환 페이징 고려
+     * -ToOne 관계만 우선 모두 페치 조인으로 최적화
+     * - 컬렉션 관계는 hibernate.default_batch_fetch_size, @BatchSize로 최적화
+     *
+     * 관수 정리 -
+     * 1. ToOne(OneToOne, ManyToOne) 관계를 모두 페치조인 한다. (toOne 연관관계가 가지고 있는 또다른 toOne 관계도 모두 패치조인)
+     * 2. 컬렉션은 지연 로딩으로 조회한다(dto 초기화 등으로).
+     *
+     * 1+N+N -> 1+1+1로 변환됨과 동시에 페이징까지 가능함.
+     * 게다가 v3처럼 컬렉션을 패치조인 하는 경우, 데이터 뻥튀기 된 row data를 어쩄든 받아오기 때문에, 불필요한 데이터가 발생하는 이슈가 있다.
+     * 하지만 v3.1는 쿼리가 더 나가기는 하지만 불필요한 중복 데이터가 발생하지는 않는다.
+     * (네트워크 호출 횟수와 전송 사이의 trade off)
+     * 한 번에 많은 데이터를 가져오는 경우 쿼리가 한 번 발생하더라도, v3가 불리할 수도 있다(흔치는 않다).
+     */
+    @GetMapping("/api/v3.1/orders")
+    public List<OrderDto> ordersV3_page(
+            @RequestParam(value = "offset", defaultValue = "0") int offset,
+            @RequestParam(value = "limit", defaultValue = "100") int limit) {
+        List<Order> orders = orderRepository.findAllWithMemberDelivery(offset, limit);
 
         List<OrderDto> result = orders.stream()
                 .map(OrderDto::new)

@@ -13,6 +13,8 @@ spring:
       hibernate:
 #        show_sql: true
         format_sql: true
+        default_batch_fetch_size: 100 # in query의 개수. 1+N 이슈를 해결하기 위한 세팅. 보통 100~1000(max) 사이로 설정함. 클래스 내에서 @BatchSize로 설정할 수도 있음.
+        # (db와 was가 견딜 수 있는 한에서 높게 설정하자. 메모리는 동일하게 부하 되므로 cpu, 리소스 등을 고민하면 된다.)
 
 logging.level:
   org.hibernate.SQL: debug
