@@ -100,4 +100,15 @@ public class OrderRepository {
         ).getResultList();
     }
 
+    public List<Order> findAllWithItem() {
+        // distinct 키워드 -> toN 관계를 그냥 fetch join 시 Order의 Row가 OrderItem의 개수만큼 뻥튀기 되버린다. 이를 방지함.
+        // 쿼리에도 distinct가 발생하긴 하지만 이 효과는 미비하고(실제로 다양한 select컬럼이 발생하기 때문), 어플리케이션 내에서 직접 중복을 제거해준다.
+        return em.createQuery(
+                "select distinct o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d" +
+                        " join fetch o.orderItems oi" +
+                        " join fetch oi.item i", Order.class)
+                .getResultList();
+    }
 }
