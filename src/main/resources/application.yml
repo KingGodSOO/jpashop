@@ -8,7 +8,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: none #create
+      ddl-auto: create #none // create: 테이블 드랍됨 / none: 유지
     properties:
       hibernate:
 #        show_sql: true
