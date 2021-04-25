@@ -141,6 +141,7 @@ public class OrderApiController {
     }
 
     /**
+     * 주문 조회 V4: JPA에서 DTO 직접 조회
      * Query: 루트 1번, 컬렉션 N 번 실행
      * ToOne(N:1, 1:1) 관계들을 먼저 조회하고, ToMany(1:N) 관계는 각각 별도로 처리한다.
      * 이런 방식을 선택한 이유는 다음과 같다.
@@ -150,6 +151,19 @@ public class OrderApiController {
     @GetMapping("/api/v4/orders")
     public List<OrderQueryDto> ordersV4() {
         return orderQueryRepository.findOrderQueryDtos();
+    }
+
+    /**
+     * 주문 조회 V5: JPA에서 DTO 직접 조회 - 컬렉션 조회 최적화
+     * Query: 루트 1번, 컬렉션 1번
+     * ToOne 관계들을 먼저 조회하고, 여기서 얻은 식별자 orderId로 ToMany 관계인 OrderItem 을 한꺼번에 조회
+     * MAP을 사용해서 매칭 성능 향상(O(1)) (메모리에 데이터 올려두고 처리)
+     *
+     * 많은 양의 코드를 작성해야 함. 컬렉션 패치조인의 자동화를 포기하지만 최적화된 쿼리가 발생한다는 이점이 있다.(tradeoff)
+     */
+    @GetMapping("/api/v5/orders")
+    public List<OrderQueryDto> ordersV5() {
+        return orderQueryRepository.findAllByDto_optimization();
     }
 
     @Data
