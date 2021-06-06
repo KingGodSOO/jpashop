@@ -143,6 +143,9 @@ public class OrderApiController {
         return result;
     }
 
+    // 아래부터는 DTO 직접 조회이다. 이는 JPA를 사용하지 않고 직접 쿼리를 짜서 날리는 것과 비슷하다.
+    // 강의에서는 아래의 방식을 추천하지 않고, 위 방법으로 해결이 안 될 경우에 사용을 고려하라고 얘기한다.
+
     /**
      * 주문 조회 V4: JPA에서 DTO 직접 조회
      * Query: 루트 1번, 컬렉션 N 번 실행
